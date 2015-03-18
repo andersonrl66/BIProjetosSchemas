@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<Schema name="CuboAcompanhamentoItem">
+    <Cube name="AcompanhamentoItem">
+        <Table name="TB_FATO_ACOMPANHAMENTO_ITEM"/>
+       
+       	<Dimension name="Tempo" foreignKey="ID_DIMENSAO_DATA" type="TimeDimension">
+			<Hierarchy hasAll="true" primaryKey="ID_DATA" allMemberName="Todas as Datas">
+				<Table name="TB_DIMENSAO_DATA" />
+				<Level name="Ano" column="NR_ANO" uniqueMembers="true" levelType="TimeYears" type="Numeric"/>
+				<Level name="Trimestre" column="NR_TRIMESTRE" uniqueMembers="false" ordinalColumn="NR_TRIMESTRE" nameColumn="NM_TRIMESTRE" levelType="TimeQuarters" type="Numeric"/>
+				<Level name="Mês" column="NR_MES" uniqueMembers="false" ordinalColumn="NR_MES" nameColumn="NM_MES" levelType="TimeMonths" type="Numeric"/>
+				<Level name="Semana" column="NR_SEMANA_MES" uniqueMembers="false" levelType="TimeWeeks" type="Numeric"/>
+				<Level name="Dia" column="NR_DIA_MES" uniqueMembers="false" levelType="TimeDays" type="Numeric"/>
+			</Hierarchy>
+		</Dimension> 
+
+       	<Dimension name="Fluxo" foreignKey="ID_DIMENSAO_FLUXO">
+			<Hierarchy name="Fluxo Iterativo" hasAll="true" primaryKey="ID_DIMENSAO_FLUXO" allMemberName="Todas os Fluxos Iterativos">
+				<Table name="TB_DIMENSAO_FLUXO" />
+				<Level name="Sistema" column="ID_SISTEMA" uniqueMembers="true" ordinalColumn="ID_SISTEMA" nameColumn="NM_SISTEMA"/>
+				<Level name="Release" column="ID_RELEASE" uniqueMembers="false" ordinalColumn="ID_RELEASE" nameColumn="NM_RELEASE"/>
+				<Level name="Iteração" column="ID_ITERACAO" uniqueMembers="false" ordinalColumn="ID_ITERACAO" nameColumn="NM_ITERACAO"/>
+			</Hierarchy>
+
+			<Hierarchy name="Fluxo Contínuo" hasAll="true" primaryKey="ID_DIMENSAO_FLUXO" allMemberName="Todas os Fluxos Contínuos">
+				<Table name="TB_DIMENSAO_FLUXO" />
+				<Level name="Sistema" column="ID_SISTEMA" uniqueMembers="true" ordinalColumn="ID_SISTEMA" nameColumn="NM_SISTEMA"/>
+				<Level name="Fluxo" column="ID_FLUXO" uniqueMembers="false" ordinalColumn="ID_FLUXO" nameColumn="NM_FLUXO"/>
+			</Hierarchy>
+		</Dimension> 
+        
+        <Dimension name="Tipo de Item" foreignKey="ID_TIPO_ITEM_TRABALHO">
+            <Hierarchy hasAll="true" primaryKey="ID_TIPO_ITEM" allMemberName="Todas os Tipos">
+                <Table name="TB_TIPO_ITEM" />
+                <Level name="Tipo" column="ID_TIPO_ITEM" uniqueMembers="true" ordinalColumn="NM_TIPO_ITEM" nameColumn="NM_TIPO_ITEM"/>
+            </Hierarchy>
+        </Dimension>
+
+        <Dimension name="Estado do Item" foreignKey="ID_ESTADO_ITEM">
+            <Hierarchy hasAll="true" primaryKey="ID_ESTADO_ITEM" allMemberName="Todas os Estados">
+                <Table name="TB_ESTADO_ITEM" />
+                <Level name="Estado" column="ID_ESTADO_ITEM" uniqueMembers="true" ordinalColumn="POS_ESTADO" nameColumn="NM_ESTADO"/>
+            </Hierarchy>
+        </Dimension>
+        
+        <Measure name="Quantidade" column="ID_FATO_ACOMPANHAMENTO" aggregator="count" formatString="Standard"/>
+    </Cube>
+</Schema>
